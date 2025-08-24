@@ -1,0 +1,81 @@
+[package]
+name = "pyforge-core"
+version = "0.1.0"
+edition = "2024"
+authors = ["BravarDev"]
+description = "Core CLI engine para PyForge - gestión de proyectos Python"
+license = "MIT"
+readme = "../README.md"
+repository = "https://github.com/tuusuario/pyforge"
+keywords = ["python", "project", "management", "cli", "tools"]
+categories = ["command-line-utilities", "development-tools"]
+
+# Binario standalone para desarrollo y testing
+[[bin]]
+name = "pyforge"
+path = "src/main.rs"
+
+# Librería para integración con Python
+[lib]
+name = "pyforge_core"
+crate-type = ["cdylib", "rlib"]  # cdylib para Python, rlib para testing
+
+
+[dependencies]
+# CLI y argumentos
+clap = { version = "4.4", features = ["derive", "cargo"] }
+colored = "2.0"
+
+# Serialización y configuración
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+serde_yaml = "0.9"
+
+# Sistema de archivos y paths
+walkdir = "2.4"
+glob = "0.3"
+tempfile = "3.8"
+
+# HTTP y descargas
+reqwest = { version = "0.11", features = ["json", "stream"] }
+tokio = { version = "1.0", features = ["full"] }
+
+# Procesamiento de texto y templates
+handlebars = "4.5"
+regex = "1.10"
+
+# Manejo de errores
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Utilidades del sistema
+which = "4.4"
+home = "0.5"
+
+# Progreso y UX
+indicatif = "0.17"
+console = "0.15"
+
+# Compresión y archivos
+tar = "0.4"
+flate2 = "1.0"
+zip = "0.6"
+
+# Integración con Python (opcional, para funciones específicas)
+pyo3 = { version = "0.20", features = ["extension-module"], optional = true }
+
+[dev-dependencies]
+assert_cmd = "2.0"
+predicates = "3.0"
+tempfile = "3.8"
+
+[features]
+default = []
+python-integration = ["pyo3"]
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
